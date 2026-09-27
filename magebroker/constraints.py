@@ -7,10 +7,15 @@ Composer constraints supported:
   ~X.Y            -- tilde minor
   >=X.Y, <=X.Y, >X.Y, <X.Y, !=X.Y, ==X.Y, =X.Y  -- comparisons
   X.Y.Z           -- exact
+  X.*             -- major wildcard (e.g. "2.*" -> >=2.0.0,<3.0.0)
+  X.Y.*           -- minor wildcard (e.g. "2.4.*" -> >=2.4.0,<2.5.0)
   *               -- any
   expr expr       -- AND range (space-separated, e.g. ">=8.1 <8.4")
   expr,expr       -- AND range (comma-separated, e.g. ">=8.1,<8.4")
   expr || expr    -- OR of two constraint groups
+
+Stability flags (@dev, @stable, @RC, etc.) and a leading "v" are stripped
+before parsing.  "dev-*" branch constraints raise InvalidConstraint.
 
 Patch-level Magento versions (e.g. "103.0.6-p3") are normalised to "103.0.6"
 before parsing so they compare correctly against SpecifierSets.
@@ -41,10 +46,30 @@ def _parse_single_token(token: str) -> SpecifierSet:
     Raises InvalidConstraint for unrecognised tokens.
     """
     token = token.strip()
+
+    # Strip stability flags like @dev, @stable, @RC, @beta, @alpha
+    token = re.sub(r"@[a-zA-Z]+$", "", token).strip()
+
+    # Strip a leading "v" (e.g. v1.2.3 -> 1.2.3)
+    if re.match(r"^v\d", token):
+        token = token[1:]
+
     token = _strip_patch_label(token)
 
     if token == "" or token == "*":
         return SpecifierSet("")
+
+    # Wildcard X.* -> >=X.0.0,<(X+1).0.0 -------------------------------------
+    m = re.fullmatch(r"(\d+)\.\*", token)
+    if m:
+        major = int(m.group(1))
+        return SpecifierSet(f">={major}.0.0,<{major + 1}.0.0")
+
+    # Wildcard X.Y.* -> >=X.Y.0,<X.(Y+1).0 -----------------------------------
+    m = re.fullmatch(r"(\d+)\.(\d+)\.\*", token)
+    if m:
+        major, minor = int(m.group(1)), int(m.group(2))
+        return SpecifierSet(f">={major}.{minor}.0,<{major}.{minor + 1}.0")
 
     # Caret ^X.Y[.Z] ----------------------------------------------------------
     # ^0.x semantics: >=0.x.0,<0.(x+1).0   (minor, not major, is the ceiling)
@@ -105,7 +130,7 @@ def _parse_and_group(s: str) -> SpecifierSet:
     s = s.strip()
     # Split on comma and/or whitespace sequences between tokens
     # Tokens start with a digit or an operator character
-    raw_tokens = re.split(r"[,\s]+(?=[><=!^~\d\*])", s)
+    raw_tokens = re.split(r"[,\s]+(?=[><=!^~\d\*v])", s)
     specs: list[str] = []
     for raw in raw_tokens:
         raw = raw.strip()

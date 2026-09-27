@@ -131,6 +131,77 @@ def test_wildcard():
     assert "1.2.3" in spec
 
 
+# --- Wildcard X.* and X.Y.* -------------------------------------------------
+
+def test_major_wildcard():
+    spec = parse_constraint("2.*")
+    assert "2.0.0" in spec
+    assert "2.4.7" in spec
+    assert "2.99.0" in spec
+    assert "3.0.0" not in spec
+    assert "1.9.9" not in spec
+
+
+def test_minor_wildcard():
+    spec = parse_constraint("2.4.*")
+    assert "2.4.0" in spec
+    assert "2.4.7" in spec
+    assert "2.5.0" not in spec
+    assert "2.3.9" not in spec
+
+
+def test_minor_wildcard_boundary():
+    spec = parse_constraint("1.0.*")
+    assert "1.0.0" in spec
+    assert "1.0.99" in spec
+    assert "1.1.0" not in spec
+
+
+# --- Stability flags stripped ------------------------------------------------
+
+def test_stability_flag_dev():
+    spec = parse_constraint("1.2.3@dev")
+    assert "1.2.3" in spec
+    assert "1.2.4" not in spec
+
+
+def test_stability_flag_stable():
+    spec = parse_constraint("1.2.3@stable")
+    assert "1.2.3" in spec
+
+
+def test_stability_flag_rc():
+    spec = parse_constraint("^8.1@RC")
+    assert "8.1.0" in spec
+    assert "9.0.0" not in spec
+
+
+# --- Leading "v" stripped ----------------------------------------------------
+
+def test_v_prefix():
+    spec = parse_constraint("v1.2.3")
+    assert "1.2.3" in spec
+    assert "1.2.4" not in spec
+
+
+def test_v_prefix_caret():
+    """v-prefix with no operator -> treat as exact after strip."""
+    spec = parse_constraint("v1.2.3")
+    assert "1.2.3" in spec
+
+
+# --- "dev-*" branch constraints stay unparseable ----------------------------
+
+def test_dev_branch_raises():
+    with pytest.raises(InvalidConstraint):
+        parse_constraint("dev-master")
+
+
+def test_dev_branch_feature_raises():
+    with pytest.raises(InvalidConstraint):
+        parse_constraint("dev-feature/my-branch")
+
+
 # --- Unknown syntax raises instead of silently matching everything -----------
 
 def test_unknown_syntax_raises():

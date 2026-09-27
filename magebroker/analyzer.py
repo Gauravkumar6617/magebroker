@@ -20,7 +20,7 @@ from typing import Any
 import networkx as nx
 
 from magebroker.collector import Project
-from magebroker.constraints import parse_constraint
+from magebroker.constraints import InvalidConstraint, parse_constraint
 
 
 # ---------------------------------------------------------------------------
@@ -37,6 +37,27 @@ class Finding:
     file: str         # relative file path hint
     message: str
     evidence: dict[str, Any] = field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Shared helper
+# ---------------------------------------------------------------------------
+
+
+def _unparseable_finding(mod_name: str, mod: Any, constraint_str: str) -> Finding:
+    """Return a warning finding for a constraint that could not be parsed."""
+    return Finding(
+        id="W0",
+        type="unparseable_constraint",
+        severity="warning",
+        module=mod_name,
+        file=str(mod.path / "composer.json"),
+        message=(
+            f"{mod_name} has a constraint that could not be parsed: "
+            f"{constraint_str!r}"
+        ),
+        evidence={"constraint": constraint_str},
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -57,7 +78,11 @@ def detect_version_conflicts(project: Project) -> list[Finding]:
             for req_pkg, constraint_str in mod.requires.items():
                 if req_pkg.lower() != pkg_name:
                     continue
-                spec = parse_constraint(constraint_str)
+                try:
+                    spec = parse_constraint(constraint_str)
+                except InvalidConstraint:
+                    findings.append(_unparseable_finding(mod_name, mod, constraint_str))
+                    continue
                 if locked_version not in spec:
                     findings.append(Finding(
                         id="B1",
@@ -233,7 +258,11 @@ def detect_upgrade_blockers(
         for pkg, constraint_str in mod.requires.items():
             if pkg.lower() != "php":
                 continue
-            spec = parse_constraint(constraint_str)
+            try:
+                spec = parse_constraint(constraint_str)
+            except InvalidConstraint:
+                findings.append(_unparseable_finding(mod_name, mod, constraint_str))
+                continue
             # Test representative versions: "8.2" -> "8.2.0"
             compatible = any(
                 f"{ver}.0" in spec for ver in required_php_versions
