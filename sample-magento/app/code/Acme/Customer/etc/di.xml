@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+    BUG B4: Both Acme_Customer and Acme_Catalog declare a <preference> for the same interface
+            Magento\Catalog\Api\ProductRepositoryInterface (line 9 here; original in
+            Acme_Catalog/etc/di.xml line 10)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- B4: duplicate preference — same interface also preferred in Acme_Catalog/etc/di.xml -->
+    <preference for="Magento\Catalog\Api\ProductRepositoryInterface"
+                type="Acme\Customer\Model\ProductRepository"/>
+    <preference for="Magento\Customer\Api\CustomerRepositoryInterface"
+                type="Acme\Customer\Model\CustomerRepository"/>
+</config>

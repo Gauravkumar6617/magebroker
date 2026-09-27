@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+    BUG B6: Acme_Search sequences 'Acme_Analytics' which does not exist anywhere in the project.
+            There is no app/code/Acme/Analytics/ directory and no composer package for it.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Acme_Search" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Search"/>
+            <module name="Acme_Analytics"/><!-- B6: ghost — Acme_Analytics module does not exist -->
+        </sequence>
+    </module>
+</config>

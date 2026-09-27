@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+    BUG B3: Acme_Catalog sequences Acme_Checkout AND Acme_Checkout sequences Acme_Catalog
+            → circular dependency loop (line 9 here; reciprocal in Acme_Checkout/etc/module.xml line 9)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Acme_Catalog" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_Store"/>
+            <module name="Acme_Checkout"/><!-- B3: circular — Acme_Checkout also sequences Acme_Catalog -->
+        </sequence>
+    </module>
+</config>

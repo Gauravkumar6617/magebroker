@@ -1,0 +1,17 @@
+{
+    "name": "acme/module-checkout",
+    "description": "Acme Checkout module",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.1.0 || ~8.2.0",
+        "magento/framework": "^102.0",
+        "magento/module-checkout": "*",
+        "magento/module-customer": "*"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "Acme\\Checkout\\": ""
+        }
+    }
+}

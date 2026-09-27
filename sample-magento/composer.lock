@@ -1,0 +1,122 @@
+{
+    "_readme": [
+        "This composer.lock is a minimal fake for MageBroker testing.",
+        "It intentionally omits 'acme/payment-gateway' to plant bug B2.",
+        "magento/framework is locked at 103.0.6 (Magento 2.4.6)."
+    ],
+    "content-hash": "aabbcc1122334455667788990011aabb",
+    "packages": [
+        {
+            "name": "magento/framework",
+            "version": "103.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112233"
+            },
+            "type": "magento2-library",
+            "description": "Magento Framework",
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-catalog",
+            "version": "104.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112234"
+            },
+            "type": "magento2-module",
+            "description": "Magento Catalog module",
+            "extra": {
+                "map": [["*", "Magento/Catalog"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-checkout",
+            "version": "100.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112235"
+            },
+            "type": "magento2-module",
+            "description": "Magento Checkout module",
+            "extra": {
+                "map": [["*", "Magento/Checkout"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-customer",
+            "version": "103.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112236"
+            },
+            "type": "magento2-module",
+            "description": "Magento Customer module",
+            "extra": {
+                "map": [["*", "Magento/Customer"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-inventory",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/inventory.git",
+                "reference": "aabbcc112237"
+            },
+            "type": "magento2-module",
+            "description": "Magento Inventory (MSI) module",
+            "extra": {
+                "map": [["*", "Magento/Inventory"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-search",
+            "version": "101.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112238"
+            },
+            "type": "magento2-module",
+            "description": "Magento Search module",
+            "extra": {
+                "map": [["*", "Magento/Search"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        },
+        {
+            "name": "magento/module-store",
+            "version": "101.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento2.git",
+                "reference": "aabbcc112239"
+            },
+            "type": "magento2-module",
+            "description": "Magento Store module",
+            "extra": {
+                "map": [["*", "Magento/Store"]]
+            },
+            "time": "2023-03-01T00:00:00+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "8.1.27"
+    },
+    "platform-dev": {}
+}

@@ -1,0 +1,16 @@
+{
+    "name": "acme/module-inventory",
+    "description": "Acme Inventory module",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.1.0",
+        "magento/framework": "^103.0",
+        "magento/module-inventory": "*"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "Acme\\Inventory\\": ""
+        }
+    }
+}

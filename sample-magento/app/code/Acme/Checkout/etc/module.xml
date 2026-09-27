@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+    BUG B1: Acme_Checkout requires magento/framework ^102.0 but composer.lock pins 103.0.6
+            (Acme_Catalog requires ^103.0 — the two constraints are incompatible)
+    BUG B3: Acme_Checkout sequences Acme_Catalog AND Acme_Catalog sequences Acme_Checkout
+            → circular dependency loop (line 9 here; reciprocal in Acme_Catalog/etc/module.xml line 11)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Acme_Checkout" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Checkout"/>
+            <module name="Magento_Customer"/>
+            <module name="Acme_Catalog"/><!-- B3: circular — Acme_Catalog also sequences Acme_Checkout -->
+        </sequence>
+    </module>
+</config>

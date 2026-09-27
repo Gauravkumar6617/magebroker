@@ -1,0 +1,16 @@
+{
+    "name": "acme/module-customer",
+    "description": "Acme Customer module",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.1.0 || ~8.2.0",
+        "magento/framework": "^103.0",
+        "magento/module-customer": "*"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "Acme\\Customer\\": ""
+        }
+    }
+}

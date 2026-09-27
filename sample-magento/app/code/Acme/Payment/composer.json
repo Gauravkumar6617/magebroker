@@ -1,0 +1,16 @@
+{
+    "name": "acme/module-payment",
+    "description": "Acme Payment module",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.1.0 || ~8.2.0",
+        "magento/framework": "^103.0",
+        "acme/payment-gateway": "^1.0"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "Acme\\Payment\\": ""
+        }
+    }
+}

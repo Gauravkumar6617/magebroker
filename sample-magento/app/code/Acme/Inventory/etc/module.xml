@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+    BUG B5: Acme_Inventory's composer.json requires php "~8.1.0" (only 8.1.x).
+            Magento 2.4.7 requires PHP 8.2 or 8.3, so this module blocks the upgrade.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Acme_Inventory" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Inventory"/>
+        </sequence>
+    </module>
+</config>
