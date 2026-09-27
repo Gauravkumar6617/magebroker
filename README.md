@@ -99,7 +99,7 @@ magebroker scan sample-magento --target 2.4.7
 │ critical │ B5 │ Acme_Inventory │ php '~8.1.0' incompatible with 2.4.7 (needs 8.2+) │
 │ warning  │ B6 │ Acme_Search    │ sequences 'Acme_Analytics' which does not exist    │
 └──────────┴────┴────────────────┴─────────────────────────────────────────────────────┘
-Health score: 25 / 100
+Health score: 10 / 100
 ```
 
 ---
@@ -158,7 +158,7 @@ This restores `sample-magento/` from git and deletes `findings.json`, `report.md
 | Total findings | 6 | 1 |
 | Critical | 4 | 1 (B2 — manual) |
 | Warning | 2 | 0 |
-| Health score | 25 / 100 | 80 / 100 |
+| Health score | 10 / 100 | 80 / 100 |
 | Fixed automatically | — | B1, B3, B4, B5, B6 |
 | Remains manual | — | B2 (`composer require acme/payment-gateway`) |
 
@@ -166,32 +166,30 @@ This restores `sample-magento/` from git and deletes `findings.json`, `report.md
 
 ## How IBM Bob Was Used
 
-This project was built entirely with IBM Bob across three phases.  The table below shows which Bob
-capability was used for each task.
+The whole project was built with IBM Bob IDE in five tasks, and Bob also runs inside the product as the Magento Broker custom mode. A summary screenshot of every task is in [`bob_sessions/`](bob_sessions/).
 
-| Task | Bob capability |
-|------|---------------|
-| Decompose a vague "Magento upgrade tooling" idea into a concrete 3-phase plan with file tree and bug catalogue | **Plan mode** |
-| Scaffold `sample-magento/` with deliberate bugs planted in exact files | **Agent mode** |
-| Implement `constraints.py`, `collector.py`, `graph.py`, `analyzer.py`, `report.py`, `cli.py` | **Agent mode** |
-| Write the full `pytest` suite (B1–B6 + clean fixture + zero-findings assertion) | **Agent mode** |
-| Debug the `op.replace("=","==")` turns `>=` into `>==` bug | **Agent mode** |
-| Add AND-range parsing, Magento patch-version normalisation, `^0.x` semantics, and unknown-syntax error | **Agent mode** |
-| Refactor B4 from one-row-per-module to one-row-per-interface | **Agent mode** |
-| Author `.bob/custom_modes.yaml` using the `create-mode` skill | **Agent mode + skill** |
-| Drive the analyse → plan → fix → verify cycle on a live project | **Magento Broker custom mode + parallel subagents** |
+| # | Task | Bob capability |
+|---|------|----------------|
+| 1 | Turn the idea into an architecture, file tree and 3-phase plan; scaffold `sample-magento/` with six planted bugs | Plan mode, Agent mode |
+| 2 | Build the scanner core, then write the analyzer, report/CLI and tests at the same time | Agent mode + 3 parallel subagents |
+| 3 | Harden the Composer constraint parser, merge duplicate findings, create the custom mode, reset script and README | Agent mode + create-mode skill |
+| 4 | Fix a real-world crash found in manual testing (Composer wildcards) and add regression tests | Agent mode |
+| 5 | Run the analyse, plan, fix, verify cycle on the sample store | Magento Broker custom mode + 3 parallel subagents |
 
----
+Result of task 5: 6 findings down to 1, health score 10 to 80, 5 files fixed automatically, 1 finding left for a human. Bob's generated plan and diff are in [`docs/demo/`](docs/demo/).
 
 ## bob_sessions/
 
-The `bob_sessions/` directory contains session notes from the Bob-assisted build process.
+Evidence of IBM Bob usage, as required by the hackathon guide.
 
 | File | Contents |
 |------|----------|
-| `phase2-scanner.md` | Phase 2 session notes: scanner implementation decisions and corrections |
-
----
+| `curiousdeveloper_task01_plan_and_sample_project_summary.png` | Task 1 summary: plan and sample Magento project |
+| `curiousdeveloper_task02_scanner_and_tests_summary.png` | Task 2 summary: scanner and tests with parallel subagents |
+| `curiousdeveloper_task03_custom_mode_and_readme_summary.png` | Task 3 summary: Magento Broker custom mode and README |
+| `curiousdeveloper_task04_constraint_crash_fix_summary.png` | Task 4 summary: real-world constraint crash fix |
+| `curiousdeveloper_task05_broker_demo_run_summary.png` | Task 5 summary: Magento Broker demo run |
+| `phase1-sample-project.md`, `phase2-scanner.md`, `phase3-custom-mode.md`, `phase4-bugfix-real-world-constraints.md` | Exported task histories for tasks 1 to 4 |
 
 ## Development
 
