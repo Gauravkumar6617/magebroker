@@ -30,11 +30,15 @@ def test_b3_circular_sequence(graph):
 
 def test_b4_duplicate_preference(project):
     findings = detect_duplicate_preferences(project)
-    assert len(findings) >= 1
-    assert all(f.type == "duplicate_preference" for f in findings)
-    modules = [f.module for f in findings]
-    # At least one of the offending modules should appear
-    assert any(m in modules for m in ("Acme_Catalog", "Acme_Customer"))
+    # B4 emits ONE finding per conflicting interface (both modules in one row)
+    assert len(findings) == 1
+    f = findings[0]
+    assert f.type == "duplicate_preference"
+    # Both offending modules must appear in the single finding
+    assert "Acme_Catalog" in f.module
+    assert "Acme_Customer" in f.module
+    # Evidence lists both implementations
+    assert len(f.evidence["all_implementations"]) == 2
 
 
 def test_b5_upgrade_blocker(project, compat):

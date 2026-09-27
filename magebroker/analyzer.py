@@ -163,8 +163,7 @@ def detect_circular_sequences(graph: nx.DiGraph) -> list[Finding]:
 def detect_duplicate_preferences(project: Project) -> list[Finding]:
     """
     Group all di.xml preferences by the 'for' interface across all modules.
-    Flag every (interface, module) pair when more than one module declares
-    the same interface.
+    Emit ONE finding per conflicting interface, listing every module involved.
     """
     iface_modules: dict[str, list[tuple[str, str]]] = defaultdict(list)
 
@@ -178,26 +177,28 @@ def detect_duplicate_preferences(project: Project) -> list[Finding]:
     findings: list[Finding] = []
     for iface, declarations in iface_modules.items():
         if len(declarations) > 1:
-            for mod_name, impl_type in declarations:
-                mod = project.modules[mod_name]
-                findings.append(Finding(
-                    id="B4",
-                    type="duplicate_preference",
-                    severity="warning",
-                    module=mod_name,
-                    file=str(mod.path / "etc" / "di.xml"),
-                    message=(
-                        f"{mod_name} declares a preference for {iface!r} "
-                        f"({impl_type}) but {len(declarations) - 1} other "
-                        f"module(s) also declare a preference for the same interface"
-                    ),
-                    evidence={
-                        "interface": iface,
-                        "all_implementations": [
-                            {"module": m, "type": t} for m, t in declarations
-                        ],
-                    },
-                ))
+            module_list = ", ".join(m for m, _ in declarations)
+            files = [
+                str(project.modules[m].path / "etc" / "di.xml")
+                for m, _ in declarations
+            ]
+            findings.append(Finding(
+                id="B4",
+                type="duplicate_preference",
+                severity="warning",
+                module=module_list,
+                file=", ".join(files),
+                message=(
+                    f"Duplicate preference for {iface!r} declared in "
+                    f"{len(declarations)} modules: {module_list}"
+                ),
+                evidence={
+                    "interface": iface,
+                    "all_implementations": [
+                        {"module": m, "type": t} for m, t in declarations
+                    ],
+                },
+            ))
 
     return findings
 

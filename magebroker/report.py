@@ -13,10 +13,10 @@ console = Console()
 def render(findings: list, out_dir: Path) -> int:
     # --- Rich table to console ---
     table = Table(title="MageBroker Findings")
-    table.add_column("Severity", style="bold")
-    table.add_column("ID")
-    table.add_column("Module")
-    table.add_column("Message")
+    table.add_column("Severity", style="bold", no_wrap=True)
+    table.add_column("ID", no_wrap=True)
+    table.add_column("Module", no_wrap=True)
+    table.add_column("Message", overflow="fold")
 
     for f in findings:
         if f.severity == "critical":
