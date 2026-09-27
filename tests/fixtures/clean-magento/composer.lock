@@ -1,0 +1,26 @@
+{
+    "_readme": ["Clean fixture for MageBroker tests. Zero bugs."],
+    "content-hash": "clean0000000000000000000000000",
+    "packages": [
+        {
+            "name": "magento/framework",
+            "version": "103.0.7",
+            "type": "magento2-library",
+            "description": "Magento Framework"
+        },
+        {
+            "name": "magento/module-store",
+            "version": "101.1.7",
+            "type": "magento2-module",
+            "description": "Magento Store module"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {"php": "8.2.0"},
+    "platform-dev": {}
+}

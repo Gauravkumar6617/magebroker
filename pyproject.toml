@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magebroker"
+version = "0.1.0"
+description = "Offline Magento 2 dependency broker and scanner"
+requires-python = ">=3.10"
+dependencies = [
+    "typer[all]>=0.9",
+    "rich>=13",
+    "networkx>=3",
+    "packaging>=23",
+]
+
+[project.scripts]
+magebroker = "magebroker.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["magebroker*"]
+
+[tool.setuptools.package-data]
+magebroker = ["../data/compat.json"]
