@@ -183,9 +183,9 @@ capability was used for each task.
 
 ---
 
-## bob-sessions/
+## bob_sessions/
 
-The `bob-sessions/` directory contains session notes from the Bob-assisted build process.
+The `bob_sessions/` directory contains session notes from the Bob-assisted build process.
 
 | File | Contents |
 |------|----------|

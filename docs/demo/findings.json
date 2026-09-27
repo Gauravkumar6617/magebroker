@@ -1,0 +1,14 @@
+[
+  {
+    "id": "B2",
+    "type": "missing_dep",
+    "severity": "critical",
+    "module": "Acme_Payment",
+    "file": "/home/gaurav/magebroker/sample-magento/app/code/Acme/Payment/composer.json",
+    "message": "Acme_Payment requires acme/payment-gateway '^1.0' but it is not present in composer.lock",
+    "evidence": {
+      "package": "acme/payment-gateway",
+      "constraint": "^1.0"
+    }
+  }
+]

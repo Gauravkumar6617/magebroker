@@ -1,0 +1,69 @@
+diff --git a/sample-magento/app/code/Acme/Catalog/etc/module.xml b/sample-magento/app/code/Acme/Catalog/etc/module.xml
+index de6a9f4..9ed0fdd 100644
+--- a/sample-magento/app/code/Acme/Catalog/etc/module.xml
++++ b/sample-magento/app/code/Acme/Catalog/etc/module.xml
+@@ -9,7 +9,6 @@
+         <sequence>
+             <module name="Magento_Catalog"/>
+             <module name="Magento_Store"/>
+-            <module name="Acme_Checkout"/><!-- B3: circular — Acme_Checkout also sequences Acme_Catalog -->
+         </sequence>
+     </module>
+ </config>
+diff --git a/sample-magento/app/code/Acme/Checkout/composer.json b/sample-magento/app/code/Acme/Checkout/composer.json
+index 53b68e8..cb9ba08 100644
+--- a/sample-magento/app/code/Acme/Checkout/composer.json
++++ b/sample-magento/app/code/Acme/Checkout/composer.json
+@@ -4,7 +4,7 @@
+     "type": "magento2-module",
+     "require": {
+         "php": "~8.1.0 || ~8.2.0",
+-        "magento/framework": "^102.0",
++        "magento/framework": "^103.0",
+         "magento/module-checkout": "*",
+         "magento/module-customer": "*"
+     },
+diff --git a/sample-magento/app/code/Acme/Customer/etc/di.xml b/sample-magento/app/code/Acme/Customer/etc/di.xml
+index 56923de..2f1fe0b 100644
+--- a/sample-magento/app/code/Acme/Customer/etc/di.xml
++++ b/sample-magento/app/code/Acme/Customer/etc/di.xml
+@@ -1,14 +1,6 @@
+ <?xml version="1.0"?>
+-<!--
+-    BUG B4: Both Acme_Customer and Acme_Catalog declare a <preference> for the same interface
+-            Magento\Catalog\Api\ProductRepositoryInterface (line 9 here; original in
+-            Acme_Catalog/etc/di.xml line 10)
+--->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+-    <!-- B4: duplicate preference — same interface also preferred in Acme_Catalog/etc/di.xml -->
+-    <preference for="Magento\Catalog\Api\ProductRepositoryInterface"
+-                type="Acme\Customer\Model\ProductRepository"/>
+     <preference for="Magento\Customer\Api\CustomerRepositoryInterface"
+                 type="Acme\Customer\Model\CustomerRepository"/>
+ </config>
+diff --git a/sample-magento/app/code/Acme/Inventory/composer.json b/sample-magento/app/code/Acme/Inventory/composer.json
+index d4d7ea9..93013b9 100644
+--- a/sample-magento/app/code/Acme/Inventory/composer.json
++++ b/sample-magento/app/code/Acme/Inventory/composer.json
+@@ -3,7 +3,7 @@
+     "description": "Acme Inventory module",
+     "type": "magento2-module",
+     "require": {
+-        "php": "~8.1.0",
++        "php": "~8.2.0||~8.3.0",
+         "magento/framework": "^103.0",
+         "magento/module-inventory": "*"
+     },
+diff --git a/sample-magento/app/code/Acme/Search/etc/module.xml b/sample-magento/app/code/Acme/Search/etc/module.xml
+index 321e831..3c64094 100644
+--- a/sample-magento/app/code/Acme/Search/etc/module.xml
++++ b/sample-magento/app/code/Acme/Search/etc/module.xml
+@@ -8,7 +8,6 @@
+     <module name="Acme_Search" setup_version="1.0.0">
+         <sequence>
+             <module name="Magento_Search"/>
+-            <module name="Acme_Analytics"/><!-- B6: ghost — Acme_Analytics module does not exist -->
+         </sequence>
+     </module>
+ </config>
